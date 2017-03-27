@@ -4,7 +4,8 @@ RSpec.describe "POST /v1/auth", type: :request do
   let(:seller)           { create :user }
   let(:car)              { create :car, seller_id: seller.id }
   let(:buyer)            { create :user }
-  let(:appointment_date) { Time.now }
+  let(:appointment_date) { Time.now + 1.hour }
+
   let(:params) do
     {
       seller_id: seller.id,
@@ -13,26 +14,77 @@ RSpec.describe "POST /v1/auth", type: :request do
     }
   end
 
-  before(:each) do
-    post '/v1/appointments', params: params
+  let(:auth_token) do
+    next unless authenticated_user
+    key = Rails.application.secrets.fetch(:secret_key_base)
+    JWT.encode({user_id: authenticated_user.id}, key)
   end
 
-  context 'when using valid parameters' do
-    it 'should create and return an appointment' do
-      data = JSON.parse(response.body)
+  let(:headers) do
+    next {} unless auth_token
+    {'Authorization': "Bearer #{auth_token}"}
+  end
 
-      expect(response.status).to eq(201)
-      expect(Appointment.count).to eq(1)
-      expect(data['seller_id']).to eq(seller.id)
-      expect(data['buyer_id']).to eq(buyer.id)
+  before(:each) do
+    post '/v1/appointments',
+      params:  params,
+      headers: headers
+  end
+
+  # An appointment can only be created if the
+  # authenticated user is the seller in the appointment
+  context 'when authenticated as another user' do
+    let(:authenticated_user) { buyer }
+
+    it 'should refuse to create the appointment' do
+      expect(Appointment.count).to eq(0)
+      expect(response.status).to eq(403)
     end
   end
 
-  context 'when overlaping other appointment' do
+  context 'when not authenticated' do
+    let(:authenticated_user) { buyer }
+
     it 'should refuse to create the appointment' do
-      post '/v1/appointments', params: params
-      expect(Appointment.count).to eq(1)
-      expect(response.status).to eq(422)
+      expect(Appointment.count).to eq(0)
+      expect(response.status).to eq(401)
+    end
+  end
+
+  context 'when authenticated as the seller' do
+    let(:authenticated_user) { seller }
+
+    context 'and using valid parameters' do
+      it 'should create and return an appointment' do
+        data = JSON.parse(response.body)
+
+        expect(response.status).to eq(201)
+        expect(Appointment.count).to eq(1)
+        expect(data['seller_id']).to eq(seller.id)
+        expect(data['buyer_id']).to eq(buyer.id)
+      end
+
+      context ', 30 minutes before the appointment date' do
+        before(:each) { Timecop.travel(appointment_date - 29.minutes) }
+        after(:each) { Timecop.return }
+
+        it 'should send a notification email to the involved parts' do
+          mails = ActionMailer::Base.deliveries.last(2)
+
+          recipients = mails.flat_map(&:to).sort
+          expected_recipients = [buyer, seller].map(&:email).sort
+
+          expect(recipients).to eq(expected_recipients)
+        end
+      end
+    end
+
+    context 'when overlaping other appointment' do
+      it 'should refuse to create the appointment' do
+        post '/v1/appointments', params: params
+        expect(Appointment.count).to eq(1)
+        expect(response.status).to eq(422)
+      end
     end
   end
 end
