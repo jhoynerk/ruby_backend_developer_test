@@ -11,6 +11,8 @@ gem 'puma',      '~> 3.0'
 gem 'pry-rails', '~> 0.3.5'
 gem 'jwt',       '~> 1.5.6'
 gem 'sidekiq',   '~> 4.2.9'
+gem 'grape'
+gem 'grape-entity'
 
 group :development, :test do
   gem 'rspec-rails',        '~> 3.5.2'
