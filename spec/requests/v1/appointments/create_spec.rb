@@ -1,8 +1,10 @@
 require 'rails_helper'
+require Rails.root.join('spec/shared/auth.rb')
 
-RSpec.describe "POST /v1/auth", type: :request do
+RSpec.describe "POST /v1/appointments", type: :request do
+  include_context :auth
+
   let(:seller)           { create :user }
-  let(:car)              { create :car, seller_id: seller.id }
   let(:buyer)            { create :user }
   let(:appointment_date) { Time.now + 1.hour }
 
@@ -14,21 +16,10 @@ RSpec.describe "POST /v1/auth", type: :request do
     }
   end
 
-  let(:auth_token) do
-    next unless authenticated_user
-    key = Rails.application.secrets.fetch(:secret_key_base)
-    JWT.encode({user_id: authenticated_user.id}, key)
-  end
-
-  let(:headers) do
-    next {} unless auth_token
-    {'Authorization': "Bearer #{auth_token}"}
-  end
-
   before(:each) do
     post '/v1/appointments',
       params:  params,
-      headers: headers
+      headers: auth_headers
   end
 
   # An appointment can only be created if the
@@ -43,7 +34,7 @@ RSpec.describe "POST /v1/auth", type: :request do
   end
 
   context 'when not authenticated' do
-    let(:authenticated_user) { buyer }
+    let(:authenticated_user) { nil }
 
     it 'should refuse to create the appointment' do
       expect(Appointment.count).to eq(0)
