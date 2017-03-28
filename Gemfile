@@ -19,7 +19,6 @@ group :development, :test do
   gem 'factory_girl_rails', '~> 4.8.0'
   gem 'faker',              '~> 1.7.3'
   gem 'database_cleaner',   '~> 1.5.3'
-  gem 'timecop',            '~> 0.8.1'
 end
 
 group :development do
