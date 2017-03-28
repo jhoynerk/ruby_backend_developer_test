@@ -15,7 +15,7 @@ class RubyBackendDeveloperTest::API::Auth < Grape::API
       user        = User.find_by(email: email)
 
       unless user
-        status 403
+        status 401
         return { error: 'User not found' }
       end
 
@@ -23,11 +23,9 @@ class RubyBackendDeveloperTest::API::Auth < Grape::API
         key = Rails.application.secrets.fetch(:secret_key_base)
         token = JWT.encode({user_id: user.id}, key)
 
-        status 200
         {token: token}
       else
-        status 403
-        return { error: "Password doesn't match" }
+        return error!("Password doesn't match", 401)
       end
     end
   end

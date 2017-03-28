@@ -14,10 +14,10 @@ RSpec.describe "PUT /v1/appointments/:id/confirm", type: :request do
   end
 
   context 'when authenticated as another user' do
-    let(:authenticated_user) { crete :user }
+    let(:authenticated_user) { create :user }
 
     it 'should refuse to create the appointment' do
-      expect(appointment.reload.cancelled).to eq(false)
+      expect(appointment.reload.cancelled).not_to eq(true)
       expect(response.status).to eq(403)
     end
   end
@@ -26,7 +26,7 @@ RSpec.describe "PUT /v1/appointments/:id/confirm", type: :request do
     let(:authenticated_user) { nil }
 
     it 'should refuse to create the appointment' do
-      expect(appointment.reload.cancelled).to eq(false)
+      expect(appointment.reload.cancelled).not_to eq(true)
       expect(response.status).to eq(401)
     end
   end

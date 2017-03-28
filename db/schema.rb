@@ -19,6 +19,8 @@ ActiveRecord::Schema.define(version: 20170327215355) do
     t.integer  "seller_id"
     t.integer  "buyer_id"
     t.datetime "date"
+    t.boolean  "confirmed"
+    t.boolean  "cancelled"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["buyer_id"], name: "index_appointments_on_buyer_id", using: :btree

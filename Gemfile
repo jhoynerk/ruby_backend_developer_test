@@ -5,15 +5,16 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rails',     '~> 5.0.2'
-gem 'pg',        '~> 0.18'
-gem 'puma',      '~> 3.0'
-gem 'pry-rails', '~> 0.3.5'
-gem 'jwt',       '~> 1.5.6'
-gem 'sidekiq',   '~> 4.2.9'
-gem 'grape'
-gem 'grape-entity'
-gem 'hashie-forbidden_attributes'
+gem 'rails',                       '~> 5.0.2'
+gem 'pg',                          '~> 0.18'
+gem 'puma',                        '~> 3.0'
+gem 'pry-rails',                   '~> 0.3.5'
+gem 'jwt',                         '~> 1.5.6'
+gem 'sidekiq',                     '~> 4.2.9'
+gem 'grape',                       '~> 0.19.1'
+gem 'grape-entity',                '~> 0.6.1'
+gem 'hashie-forbidden_attributes', '~> 0.1.1'
+gem 'pundit',                      '~> 1.1.0'
 
 group :development, :test do
   gem 'rspec-rails',        '~> 3.5.2'
