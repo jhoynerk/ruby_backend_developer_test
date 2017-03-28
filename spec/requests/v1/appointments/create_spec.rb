@@ -10,9 +10,11 @@ RSpec.describe "POST /v1/appointments", type: :request do
 
   let(:params) do
     {
-      seller_id: seller.id,
-      buyer_id:  buyer.id,
-      date:      appointment_date
+      appointment: {
+        seller_id: seller.id,
+        buyer_id:  buyer.id,
+        date:      appointment_date
+      }
     }
   end
 

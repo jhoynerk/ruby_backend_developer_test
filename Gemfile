@@ -13,6 +13,7 @@ gem 'jwt',       '~> 1.5.6'
 gem 'sidekiq',   '~> 4.2.9'
 gem 'grape'
 gem 'grape-entity'
+gem 'hashie-forbidden_attributes'
 
 group :development, :test do
   gem 'rspec-rails',        '~> 3.5.2'
