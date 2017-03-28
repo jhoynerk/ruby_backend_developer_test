@@ -10,16 +10,20 @@ RSpec.describe "POST /v1/appointments", type: :request do
 
   let(:params) do
     {
-      seller_id: seller.id,
-      buyer_id:  buyer.id,
-      date:      appointment_date
+      appointment: {
+        seller_id: seller.id,
+        buyer_id:  buyer.id,
+        date:      appointment_date
+      }
     }
   end
 
   before(:each) do
-    post '/v1/appointments',
-      params:  params,
-      headers: auth_headers
+    Sidekiq::Testing.inline! do
+      post '/v1/appointments',
+        params:  params,
+        headers: auth_headers
+    end
   end
 
   # An appointment can only be created if the
@@ -56,9 +60,6 @@ RSpec.describe "POST /v1/appointments", type: :request do
       end
 
       context ', 30 minutes before the appointment date' do
-        before(:each) { Timecop.travel(appointment_date - 29.minutes) }
-        after(:each) { Timecop.return }
-
         it 'should send a notification email to the involved parts' do
           mails = ActionMailer::Base.deliveries.last(2)
 
@@ -72,9 +73,9 @@ RSpec.describe "POST /v1/appointments", type: :request do
 
     context 'when overlaping other appointment' do
       it 'should refuse to create the appointment' do
-        post '/v1/appointments', params: params
-        expect(Appointment.count).to eq(1)
+        post '/v1/appointments', params: params, headers: auth_headers
         expect(response.status).to eq(422)
+        expect(Appointment.count).to eq(1)
       end
     end
   end
