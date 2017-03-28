@@ -90,4 +90,4 @@ rspec
 
 ## Contributing
 Pull requests and issues are welcome.
-We'd love to see better ways to test the points described in [Human requirements](#human_requirements), while remaining short and easy to complete by a potencial candidate.
+We'd love to see better ways to test the points described in [Human requirements](#human-requirements), while remaining short and easy to complete by a potencial candidate.
