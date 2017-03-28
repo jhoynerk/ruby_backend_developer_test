@@ -74,8 +74,10 @@ You are free to remove and add any gem as you see fit for the completion of the 
 
 ### Getting up and runing
 
+For this repo with your own account.
+
 ~~~bash
-git clone git@github.com:YaVende/ruby_backend_developer_test.git
+git clone git@github.com:youruser/ruby_backend_developer_test.git
 cd ruby_backend_developer_test
 bundle
 rake db:create db:migrate # You probably will need to tweak config/database.yml
@@ -87,6 +89,7 @@ rake spec
 # or
 rspec
 ~~~
+Solve stuff. Once you are done, push all to master and notify us. Good luck, have fun.
 
 ## Contributing
 Pull requests and issues are welcome.
