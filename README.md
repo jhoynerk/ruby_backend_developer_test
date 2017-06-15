@@ -3,6 +3,11 @@
 This repo hosts the skeleton of a tested rails API.
 It's meant to be completed by candidates as a leveling test.
 
+## How to complete the test
+- Fork and clone the repo
+- Complete the assigments
+- Make sure the automated tests give the green light
+- Commit and push
 
 ## Human requirements
 
