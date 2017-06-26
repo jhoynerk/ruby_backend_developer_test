@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+ruby '2.3.1'
 
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
@@ -13,6 +14,8 @@ gem 'jwt',       '~> 1.5.6'
 gem 'sidekiq',   '~> 4.2.9'
 gem 'grape'
 gem 'grape-entity'
+
+gem 'dotenv-rails'
 
 group :development, :test do
   gem 'rspec-rails',        '~> 3.5.2'
