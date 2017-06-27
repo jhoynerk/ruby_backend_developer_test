@@ -33,7 +33,7 @@ RSpec.describe "POST /v1/appointments", type: :request do
 
     it 'should refuse to create the appointment' do
       expect(Appointment.count).to eq(0)
-      expect(response.status).to eq(403)
+      expect(response.status).to eq(401) # :unauthorized is 401
     end
   end
 
@@ -55,8 +55,8 @@ RSpec.describe "POST /v1/appointments", type: :request do
 
         expect(response.status).to eq(201)
         expect(Appointment.count).to eq(1)
-        expect(data['seller_id']).to eq(seller.id)
-        expect(data['buyer_id']).to eq(buyer.id)
+        expect(data['data']['seller_id']).to eq(seller.id)
+        expect(data['data']['buyer_id']).to eq(buyer.id)
       end
 
       context ', 30 minutes before the appointment date' do
