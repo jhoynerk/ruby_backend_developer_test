@@ -1,7 +1,7 @@
 class User < ApplicationRecord
 
-  has_many :appointments_as_seller, inverse_of: :seller
-  has_many :appointments_as_buyer, inverse_of: :buyer
+  has_many :appointments_seller, class_name: 'Appointment', foreign_key: :seller_id
+  has_many :appointments_buyer, class_name: 'Appointment', foreign_key: :buyer_id
 
   validates :email, uniqueness: true
 
