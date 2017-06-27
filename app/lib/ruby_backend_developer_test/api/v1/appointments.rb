@@ -13,11 +13,15 @@ class RubyBackendDeveloperTest::API::V1::Appointments < Grape::API
 
     post do
       attributes = params.fetch(:appointment)
-      appointment = Appointment.create({
-                                          seller_id: attributes.seller_id,
-                                          buyer_id: attributes.buyer_id,
-                                          date: attributes.date
-                                        })
+      if current_user.id == attributes.seller_id
+        appointment = Appointment.create({
+                                            seller_id: attributes.seller_id,
+                                            buyer_id: attributes.buyer_id,
+                                            date: attributes.date
+                                          })
+      else
+        return status :unauthorized
+      end
       if appointment.errors.any?
         status :unprocessable_entity
         { errors: appointment.errors.full_messages }
