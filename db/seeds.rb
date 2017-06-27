@@ -7,3 +7,5 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 User.create( name: Faker::Name.name, email: 'test@gmail.com', password: 'password')
+User.create( name: Faker::Name.name, email: 'test1@gmail.com', password: 'password')
+User.create( name: Faker::Name.name, email: 'test2@gmail.com', password: 'password')
