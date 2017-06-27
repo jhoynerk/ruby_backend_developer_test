@@ -7,11 +7,9 @@ class RubyBackendDeveloperTest::API < Grape::API
     end
 
     def set_user
-      pattern = /^Bearer /
-      header_token  = headers['Authentication']
-      header_token.gsub(pattern, '') if header_token && header_token.match(pattern)
-      return if header_token.nil?
-      user_id = Authentication::jwt_decode(header_token)
+      token = headers['Authentication']&.split&.last
+      return if token.nil?
+      user_id = Authentication::jwt_decode(token)
       user_id = user_id[0]['user_id']
       return if user_id.nil?
       User.find_by(id: user_id)
