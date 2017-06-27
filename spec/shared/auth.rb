@@ -9,6 +9,6 @@ RSpec.shared_context :auth, shared_context: :metadata do
 
   let(:auth_headers) do
     next {} unless auth_token
-    {'Authorization': "Bearer #{auth_token}"}
+    {'Authentication': "Bearer #{auth_token}"}
   end
 end
