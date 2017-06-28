@@ -17,7 +17,7 @@ RSpec.describe "PUT /v1/appointments/:id/confirm", type: :request do
     let(:authenticated_user) { seller }
 
     it 'should refuse to create the appointment' do
-      expect(appointment.reload.confirmed).not_to eq(true)
+      expect(appointment.reload.status).not_to eq(true)
       expect(response.status).to eq(403)
     end
   end
@@ -26,7 +26,7 @@ RSpec.describe "PUT /v1/appointments/:id/confirm", type: :request do
     let(:authenticated_user) { nil }
 
     it 'should refuse to create the appointment' do
-      expect(appointment.reload.confirmed).not_to eq(true)
+      expect(appointment.reload.status).not_to eq(true)
       expect(response.status).to eq(401)
     end
   end
@@ -35,7 +35,7 @@ RSpec.describe "PUT /v1/appointments/:id/confirm", type: :request do
     let(:authenticated_user) { buyer }
 
     it 'should confirm the appointment' do
-      expect(appointment.reload.confirmed).to eq(true)
+      expect(appointment.reload.status).to eq(true)
       expect(response.status).to eq(200)
     end
   end
